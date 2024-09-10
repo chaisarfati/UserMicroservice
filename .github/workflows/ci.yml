@@ -62,3 +62,19 @@ jobs:
         source venv/bin/activate
         python -m pip install -r requirements.txt
         python -m unittest discover -s . -p "test_server.py"
+
+    - name: Commit generated stubs
+      run: |
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+        git config --global push.autoSetupRemote true
+        git fetch
+        git pull origin ${{ env.BRANCH_NAME }}
+        git add stubs/
+        git diff-index --quiet HEAD || git commit -m "Generated stubs"
+          
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GH_TOKEN }}
+        branch: ${{ env.BRANCH_NAME }}
