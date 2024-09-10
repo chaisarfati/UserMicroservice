@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+
+package user.v1;
+
+// The UserService provides information and management for users.
+service UserService {
+    // Creates a new user.
+    rpc CreateUser (CreateUserRequest) returns (User);
+    // Get a user by ID
+    rpc GetUser (GetUserRequest) returns (User);
+    // Updates an existing user.
+    rpc UpdateUser (UpdateUserRequest) returns (User);
+    // Deletes a user by ID.
+    rpc DeleteUser (DeleteUserRequest) returns (google.protobuf.Empty);
+}
+
+message GetUserRequest {
+    string id = 1; // the unique ID of the user
+}
+
+message CreateUserRequest {
+    string name = 1; // Name of the user
+    string email = 2; // Email of the user
+    Geolocation location = 3; // optional. Geolocation of the user
+}
+
+message UpdateUserRequest {
+    User user = 1; // The user with updated fields
+    google.protobuf.FieldMask update_mask = 2; // Fields to be updated
+}
+
+message DeleteUserRequest {
+    string id = 1; // the unique ID of the user
+}
+
+// Message to represent a user
+message User {
+    string id = 1; // Unique identifier for the user
+    string name = 2; // Name of the user
+    string email = 3; // Email of the user
+    Geolocation location = 4; // optional. Geolocation of the user
+}
+
+// Message to represent geolocation
+message Geolocation {
+    double latitude = 1;
+    double longitude = 2;
+}
