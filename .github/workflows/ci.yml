@@ -70,7 +70,7 @@ jobs:
         git config --global push.autoSetupRemote true
         git fetch
         git pull origin ${{ env.BRANCH_NAME }}
-        git add stubs/
+        git add .
         git diff-index --quiet HEAD || git commit -m "Generated stubs"
           
     - name: Push changes
