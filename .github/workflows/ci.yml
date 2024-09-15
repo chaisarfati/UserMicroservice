@@ -102,7 +102,7 @@ jobs:
       - name: Convert repository name to lowercase and sanitize branch name
         id: vars
         run: |
-          echo "REPO_NAME_LOWER=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]' | cut -d"/" -f2)" >> $GITHUB_ENV
+          echo "REPO_NAME_LOWER=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
           echo "BRANCH_NAME_SANITIZED=$(echo ${{ github.ref_name }} | tr '[:upper:]' '[:lower:]' | tr '_' '-' | tr '/' '-')" >> $GITHUB_ENV
           echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
           
@@ -112,5 +112,3 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/${{ env.REPO_NAME_LOWER }}:${{ env.BRANCH_NAME_SANITIZED }}.${{ env.SHA_SHORT }}.docker
-          build-args: |
-            GH_TOKEN=${{ secrets.GH_TOKEN }}
