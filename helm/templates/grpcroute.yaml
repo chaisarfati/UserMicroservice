@@ -1,0 +1,24 @@
+{{- $grpcServiceName := .Values.grpcservice }}
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: GRPCRoute
+metadata:
+  name: {{ .Chart.Name }}-grpcroute
+spec:
+  hostnames: 
+    - {{ .Chart.Name }}.yourdomain.com
+  parentRefs:
+    - name: kong
+  rules:
+    - backendRefs:
+      - name: {{ .Chart.Name }}
+        port: 50051
+      matches:
+      - method:
+          method: ServerReflectionInfo
+          service: grpc.reflection.v1alpha.ServerReflection
+{{- range $method := .Values.grpcmethods }}
+      - method:
+          method:  {{ $method.name }}
+          service: {{ $grpcServiceName }}
+{{ end }}

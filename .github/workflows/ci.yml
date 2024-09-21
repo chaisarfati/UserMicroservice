@@ -112,3 +112,13 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/${{ env.REPO_NAME_LOWER }}:${{ env.BRANCH_NAME_SANITIZED }}.${{ env.SHA_SHORT }}.docker
+
+      - name: Building Helm Chart
+        if: github.event_name == 'this job will not be executed by github worflow'
+        run: |
+          imagetag="${{ env.BRANCH_NAME_SANITIZED }}.${{ env.SHA_SHORT }}.docker"
+          aws ecr get-login-password --region REGION | helm registry login --username AWS --password-stdin ACCOUNT.dkr.ecr.REGION.amazonaws.com
+          helm dep update helm/
+          helm package helm/ --destination .
+          CHART_NAME=$(ls *.tgz)
+          helm push $CHART_NAME oci://ACCOUNT.dkr.ecr.REGION.amazonaws.com/

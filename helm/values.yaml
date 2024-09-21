@@ -1,0 +1,16 @@
+replicaCount: 1
+
+image:
+  repository: ACCOUNT.dkr.ecr.REGION.amazonaws.com/user
+  tag: main
+
+service:
+  type: ClusterIP
+  port: 50051
+
+grpcservice: user.v1.UserService
+grpcmethods: 
+  - name: CreateUser
+  - name: GetUser
+  - name: DeleteUser
+  - name: UpdateUser
